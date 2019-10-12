@@ -17,7 +17,7 @@
 #define I2C_TEST_TASK_NAME			"i2c_test_task"
 
 #define ECHO_TASK_PRIORITY  		(configMAX_PRIORITIES - 1U)
-#define I2C_TEST_TASK_PRIORITY		(configMAX_PRIORITIES - 1U)
+#define I2C_TEST_TASK_PRIORITY		(configMAX_PRIORITIES - 2U)
 
 #define M24LC256_ADDRESS			(0x50)
 #define TEST_TEXT_LENGTH			(5U)
@@ -96,7 +96,8 @@ void i2c_test_task(void* args)
 
 /* Task local variables */
 
-	i2c_master_transfer_t xfer = {0};
+	i2c_master_transfer_t write_xfer = {0};
+	i2c_master_transfer_t read_xfer = {0};
 
 	uint8_t write_buffer[TEST_TEXT_LENGTH] = "Tufak";
 	uint8_t read_buffer[TEST_TEXT_LENGTH]  = "-----";
@@ -115,7 +116,7 @@ void i2c_test_task(void* args)
 /* Initialize I2C channel */
 	/* Define channel configuration */
 
-	i2c_config.baudrate    = 10000U;
+	i2c_config.baudrate    = 100000U;
 	i2c_config.i2c_channel = I2C0;
 	i2c_config.pin_mux     = 5U;
 	i2c_config.port        = PORTE;
@@ -132,16 +133,16 @@ void i2c_test_task(void* args)
 /* Writing into memory */
 
 	/* Define write transfer */
-	xfer.data           = ((uint8_t* volatile) (write_buffer));
-	xfer.dataSize       = TEST_TEXT_LENGTH;
-	xfer.direction      = kI2C_Write;
-	xfer.flags          = kI2C_TransferDefaultFlag;
-	xfer.slaveAddress   = M24LC256_ADDRESS;
-	xfer.subaddress     = 0U;
-	xfer.subaddressSize = 2U;
+	write_xfer.data           = ((uint8_t* volatile) (write_buffer));
+	write_xfer.dataSize       = TEST_TEXT_LENGTH;
+	write_xfer.direction      = kI2C_Write;
+	write_xfer.flags          = kI2C_TransferDefaultFlag;
+	write_xfer.slaveAddress   = M24LC256_ADDRESS;
+	write_xfer.subaddress     = 0U;
+	write_xfer.subaddressSize = 2U;
 
 	/* Write into memory */
-	rtos_i2c_transfer(i2c_config.i2c_channel, &xfer);
+	rtos_i2c_transfer(i2c_config.i2c_channel, &write_xfer);
 
 
 
@@ -150,16 +151,16 @@ void i2c_test_task(void* args)
 /* Reading from memory */
 
 	/* Define read transfer */
-	xfer.data           = ((uint8_t* volatile) (read_buffer));
-	xfer.dataSize       = TEST_TEXT_LENGTH;
-	xfer.direction      = kI2C_Read;
-	xfer.flags          = kI2C_TransferDefaultFlag;
-	xfer.slaveAddress   = M24LC256_ADDRESS;
-	xfer.subaddress     = 0U;
-	xfer.subaddressSize = 2U;
+	read_xfer.data           = ((uint8_t* volatile) (read_buffer));
+	read_xfer.dataSize       = TEST_TEXT_LENGTH;
+	read_xfer.direction      = kI2C_Read;
+	read_xfer.flags          = kI2C_TransferDefaultFlag;
+	read_xfer.slaveAddress   = M24LC256_ADDRESS;
+	read_xfer.subaddress     = 0U;
+	read_xfer.subaddressSize = 2U;
 
 	/* Read from memory */
-	rtos_i2c_transfer(i2c_config.i2c_channel, &xfer);
+	rtos_i2c_transfer(i2c_config.i2c_channel, &read_xfer);
 
 
 
@@ -201,7 +202,7 @@ void i2c_test_task(void* args)
 /* End task */
 
 	/* Suspend itself */
-	vTaskSuspend(i2c_test_task_handle);
+//	vTaskSuspend(i2c_test_task_handle);
 
 	/* Infinite loop */
 	for(;;);
