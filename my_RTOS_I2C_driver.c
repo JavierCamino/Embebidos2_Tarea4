@@ -74,8 +74,8 @@ static inline void enable_port_clock(PORT_Type* port)
 	/* Enable the clock for the specified port */
 	switch( ((uint32_t) (port)) )
 	{
-	case PORTA_BASE: CLOCK_EnableClock(kCLOCK_PortA); break;
-	case PORTB_BASE: CLOCK_EnableClock(kCLOCK_PortB); break;
+	case PORTA_BASE: CLOCK_EnableClock(kCLOCK_PortA);   break;
+	case PORTB_BASE: CLOCK_EnableClock(kCLOCK_PortB);   break;
 	case PORTC_BASE: CLOCK_EnableClock(kCLOCK_PortC);	break;
 	case PORTD_BASE: CLOCK_EnableClock(kCLOCK_PortD);	break;
 	case PORTE_BASE: CLOCK_EnableClock(kCLOCK_PortE);	break;

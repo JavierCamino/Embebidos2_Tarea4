@@ -8,6 +8,7 @@
 
 #include "my_RTOS_UART_driver.h"
 #include "my_RTOS_I2C_driver.h"
+#include "my_RTOS_GPIO_driver.h"
 
 
 /////////////////////////////////////////
@@ -211,11 +212,6 @@ void i2c_test_task(void* args)
 }
 
 
-
-
-
-
-
 int main(void) {
   	/* Init board hardware. */
 //    BOARD_InitBootPins();
@@ -229,8 +225,8 @@ int main(void) {
 
 
     /* Create tasks. */
-	CREATE_TASK(echo_task, ECHO_TASK_NAME, configMINIMAL_STACK_SIZE, NULL, ECHO_TASK_PRIORITY, &echo_task_handle);
-	CREATE_TASK(i2c_test_task, I2C_TEST_TASK_NAME, 500U, NULL, I2C_TEST_TASK_PRIORITY, &i2c_test_task_handle);
+	CREATE_TASK(echo_task,     ECHO_TASK_NAME,     configMINIMAL_STACK_SIZE, NULL, ECHO_TASK_PRIORITY, 	   &echo_task_handle);
+	CREATE_TASK(i2c_test_task, I2C_TEST_TASK_NAME, 500U, 					 NULL, I2C_TEST_TASK_PRIORITY, &i2c_test_task_handle);
 
 
 
